@@ -69,37 +69,58 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        {/* Horizontal timeline — desktop */}
-        <div className="hidden lg:block">
-          {/* Timeline line */}
-          <div className="relative mb-12">
-            <div className="absolute top-6 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, rgba(201,168,76,0.6) 0%, rgba(201,168,76,0.2) 100%)" }} />
-            <div className="grid grid-cols-6 gap-0">
-              {steps.map((step, i) => (
-                <div key={i} className="flex flex-col items-center relative">
-                  {/* Circle node */}
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center z-10 mb-6 relative shrink-0"
-                    style={{
-                      background: i === 0
-                        ? "linear-gradient(135deg, #e8c97a, #c9a84c)"
-                        : "rgba(18,12,4,0.9)",
-                      border: "1.5px solid rgba(201,168,76,0.5)",
-                    }}
-                  >
-                    <span className="text-xs font-black" style={{ color: i === 0 ? "#050505" : "#c9a84c" }}>{step.phase}</span>
-                  </div>
+        {/* Horizontal timeline — desktop: 2 rows of 3 */}
+        <div className="hidden lg:block space-y-16">
+          {[steps.slice(0, 3), steps.slice(3, 6)].map((row, rowIdx) => {
+            const firstIdx = rowIdx === 0 ? 0 : 3;
+            return (
+              <div key={rowIdx} className="relative">
+                {/* Horizontal connecting line for this row */}
+                <div
+                  className="absolute top-6 left-[16.67%] right-[16.67%] h-px"
+                  style={{
+                    background: "linear-gradient(90deg, rgba(201,168,76,0.55) 0%, rgba(201,168,76,0.18) 100%)",
+                  }}
+                />
+                <div className="grid grid-cols-3 gap-0">
+                  {row.map((step, colIdx) => {
+                    const globalIdx = firstIdx + colIdx;
+                    const isFilled = colIdx === 0; // first of each row
+                    return (
+                      <div key={globalIdx} className="flex flex-col items-center relative">
+                        {/* Circle node */}
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center z-10 mb-6 relative shrink-0"
+                          style={{
+                            background: isFilled
+                              ? "linear-gradient(135deg, #e8c97a, #c9a84c)"
+                              : "rgba(18,12,4,0.9)",
+                            border: "1.5px solid rgba(201,168,76,0.5)",
+                          }}
+                        >
+                          <span
+                            className="text-xs font-black"
+                            style={{ color: isFilled ? "#050505" : "#c9a84c" }}
+                          >
+                            {step.phase}
+                          </span>
+                        </div>
 
-                  {/* Step content */}
-                  <div className="text-center px-2">
-                    <div className="text-[10px] font-bold tracking-[0.18em] uppercase text-[#c9a84c] mb-1.5 opacity-70">{step.sub}</div>
-                    <h3 className="text-sm font-bold text-[#f0e8d8] mb-2">{step.title}</h3>
-                    <p className="text-xs text-[#6a5840] leading-relaxed">{step.desc}</p>
-                  </div>
+                        {/* Step content */}
+                        <div className="text-center px-4">
+                          <div className="text-[10px] font-bold tracking-[0.18em] uppercase text-[#c9a84c] mb-1.5 opacity-70">
+                            {step.sub}
+                          </div>
+                          <h3 className="text-sm font-bold text-[#f0e8d8] mb-2">{step.title}</h3>
+                          <p className="text-xs text-[#6a5840] leading-relaxed">{step.desc}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Mobile stacked timeline */}

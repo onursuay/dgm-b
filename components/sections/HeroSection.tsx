@@ -1,41 +1,6 @@
 "use client";
-import { useEffect, useRef } from "react";
 
 export default function HeroSection() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    const pts: { x: number; y: number; vx: number; vy: number; size: number; alpha: number }[] = [];
-    for (let i = 0; i < 80; i++) {
-      pts.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
-        size: Math.random() * 1.5 + 0.5, alpha: Math.random() * 0.5 + 0.1 });
-    }
-    let id: number;
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      pts.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
-        ctx.save(); ctx.globalAlpha = p.alpha; ctx.fillStyle = "#c9a84c";
-        ctx.shadowBlur = 6; ctx.shadowColor = "#c9a84c";
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-      });
-      id = requestAnimationFrame(draw);
-    };
-    draw();
-    const resize = () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; };
-    window.addEventListener("resize", resize);
-    return () => { cancelAnimationFrame(id); window.removeEventListener("resize", resize); };
-  }, []);
-
   const stats = [
     { value: "3×", label: "Slower Fire Spread", sub: "on treated surfaces" },
     { value: "+7 min", label: "Response Window", sub: "average gain" },
@@ -44,103 +9,173 @@ export default function HeroSection() {
   ];
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "#050505" }}>
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ opacity: 0.4 }} />
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+      style={{ background: "#050505" }}
+    >
+      {/* Faint gold grid pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
+          opacity: 1,
+        }}
+      />
 
-      {/* Grid overlay */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)",
-        backgroundSize: "80px 80px"
-      }} />
+      {/* Thin vertical accent line — ~10% from left */}
+      <div
+        className="absolute top-0 bottom-0 pointer-events-none"
+        style={{
+          left: "10%",
+          width: "1px",
+          background:
+            "linear-gradient(180deg, transparent 0%, rgba(201,168,76,0.35) 20%, rgba(201,168,76,0.35) 80%, transparent 100%)",
+        }}
+      />
 
-      {/* Side glow */}
-      <div className="absolute left-0 top-0 bottom-0 w-1/2 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 80% 70% at 20% 50%, rgba(201,168,76,0.07) 0%, transparent 70%)"
-      }} />
+      <div className="relative z-10 w-full max-w-[1300px] mx-auto px-6 lg:px-10 pt-28 pb-16">
 
-      <div className="relative z-10 max-w-[1300px] mx-auto px-6 lg:px-10 w-full pt-20 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        {/* Eyebrow */}
+        <div
+          className="flex items-center gap-3 mb-8 animate-fade-in-up"
+          style={{ animationDelay: "0s" }}
+        >
+          <div
+            className="w-8 h-px"
+            style={{ background: "rgba(201,168,76,0.5)" }}
+          />
+          <span
+            className="text-xs font-bold tracking-[0.3em] uppercase"
+            style={{ color: "#c9a84c" }}
+          >
+            Germany · Next-Gen Fire Safety
+          </span>
+        </div>
 
-          {/* Left — Text content */}
-          <div>
-            <div className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full border border-amber-900/30 animate-fade-in-up"
-              style={{ background: "rgba(201,168,76,0.06)", animationDelay: "0s" }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#c9a84c]" />
-              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#c9a84c]">Germany · Fire Safety Technology</span>
+        {/* Giant headline — left-aligned, full-width */}
+        <h1
+          className="font-black leading-[0.95] tracking-tight mb-12 animate-fade-in-up"
+          style={{ animationDelay: "0.12s" }}
+        >
+          <span
+            className="block text-[#f0e8d8]"
+            style={{ fontSize: "clamp(3rem,8vw,7rem)" }}
+          >
+            FIRE SPREADS
+          </span>
+          <span
+            className="block text-[#f0e8d8]"
+            style={{ fontSize: "clamp(3rem,8vw,7rem)" }}
+          >
+            IN SECONDS.
+          </span>
+          <span
+            className="block"
+            style={{
+              fontSize: "clamp(3rem,8vw,7rem)",
+              background: "linear-gradient(90deg, #e8c97a 0%, #c9a84c 50%, #f0daa0 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            DNF BUYS TIME.
+          </span>
+        </h1>
+
+        {/* Horizontal stats bar — full width, 4 cols */}
+        <div
+          className="grid grid-cols-2 lg:grid-cols-4 w-full border animate-fade-in-up mb-10"
+          style={{
+            borderColor: "rgba(201,168,76,0.18)",
+            background: "rgba(10,7,2,0.6)",
+            animationDelay: "0.28s",
+          }}
+        >
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className="flex flex-col justify-center px-6 py-6 group hover:bg-amber-900/5 transition-colors"
+              style={{
+                borderRight:
+                  i < stats.length - 1
+                    ? "1px solid rgba(201,168,76,0.12)"
+                    : "none",
+              }}
+            >
+              <div
+                className="text-3xl lg:text-4xl font-black mb-1 leading-none"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #e8c97a 0%, #c9a84c 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                {s.value}
+              </div>
+              <div className="text-xs font-semibold text-[#d8c8a0] mb-0.5">
+                {s.label}
+              </div>
+              <div className="text-[10px] text-[#5a4830]">{s.sub}</div>
             </div>
+          ))}
+        </div>
 
-            <h1 className="font-black leading-[1.05] tracking-tight mb-8">
-              <span className="block text-4xl sm:text-5xl lg:text-6xl text-[#f0e8d8] animate-fade-in-up" style={{ animationDelay: "0.15s" }}>
-                FIRE SPREADS<br />IN SECONDS.
-              </span>
-              <span className="block text-3xl sm:text-4xl lg:text-5xl mt-3 animate-fade-in-up" style={{
-                background: "linear-gradient(90deg, #e8c97a 0%, #c9a84c 50%, #f0daa0 100%)",
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-                animationDelay: "0.3s"
-              }}>DNF BUYS TIME.</span>
-            </h1>
-
-            <p className="text-lg text-[#8a7060] mb-10 leading-relaxed max-w-xl animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
-              The world's first proactive fire spread retardant — eco-certified, deployable at scale,
-              proven across forests, cities, industrial zones and critical infrastructure.
-            </p>
-
-            <div className="flex flex-wrap gap-3 animate-fade-in-up" style={{ animationDelay: "0.6s" }}>
-              <a href="#technology" className="btn-ice px-8 py-4 rounded-full text-sm font-bold">Explore Technology</a>
-              <a href="#demonstrations" className="btn-outline-ice px-8 py-4 rounded-full text-sm">Watch Live Demo</a>
-            </div>
-
-            <div className="mt-6 animate-fade-in-up" style={{ animationDelay: "0.7s" }}>
-              <a href="https://wa.me/491234567890" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-[#5a4830] hover:text-[#8a7060] transition-colors">
-                <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                </svg>
-                WhatsApp Contact
-              </a>
-            </div>
+        {/* CTA row — left CTAs, right cert text */}
+        <div
+          className="flex items-center justify-between gap-6 animate-fade-in-up"
+          style={{ animationDelay: "0.44s" }}
+        >
+          {/* Left: buttons + WhatsApp */}
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href="#technology"
+              className="btn-ice px-8 py-4 rounded-full text-sm font-bold"
+            >
+              Explore Technology
+            </a>
+            <a
+              href="#demonstrations"
+              className="btn-outline-ice px-8 py-4 rounded-full text-sm"
+            >
+              Watch Live Demo
+            </a>
+            <a
+              href="https://wa.me/491234567890"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm transition-colors"
+              style={{ color: "#5a4830" }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.color = "#8a7060")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = "#5a4830")
+              }
+            >
+              <svg
+                className="w-4 h-4 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+              </svg>
+              WhatsApp Contact
+            </a>
           </div>
 
-          {/* Right — Stats panel */}
-          <div className="animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
-            <div className="rounded-3xl overflow-hidden border border-amber-900/20"
-              style={{ background: "rgba(14,10,3,0.85)", backdropFilter: "blur(12px)" }}>
-
-              {/* Panel header */}
-              <div className="px-8 py-5 border-b border-amber-900/15 flex items-center justify-between">
-                <span className="text-xs font-bold tracking-[0.25em] uppercase text-[#8a7060]">Performance Data</span>
-                <span className="flex items-center gap-1.5 text-xs text-[#5a4830]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  Lab Verified
-                </span>
-              </div>
-
-              {/* Stat rows */}
-              <div className="divide-y divide-amber-900/10">
-                {stats.map((s) => (
-                  <div key={s.label} className="flex items-center justify-between px-8 py-6 group hover:bg-amber-900/5 transition-colors">
-                    <div>
-                      <div className="text-sm font-semibold text-[#d8c8a0] mb-0.5">{s.label}</div>
-                      <div className="text-xs text-[#5a4830]">{s.sub}</div>
-                    </div>
-                    <div className="text-4xl font-black" style={{
-                      background: "linear-gradient(135deg, #e8c97a 0%, #c9a84c 100%)",
-                      WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
-                    }}>{s.value}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA row */}
-              <div className="px-8 py-5 border-t border-amber-900/15">
-                <a href="#demonstrations" className="btn-ice w-full py-3 rounded-xl text-sm text-center block">
-                  View Full Test Report
-                </a>
-              </div>
-            </div>
-          </div>
-
+          {/* Right: cert text — hidden on mobile */}
+          <p
+            className="hidden lg:block text-xs italic text-right leading-relaxed shrink-0"
+            style={{ color: "#5a4830" }}
+          >
+            Eco-certified · Made in Germany
+          </p>
         </div>
       </div>
     </section>
