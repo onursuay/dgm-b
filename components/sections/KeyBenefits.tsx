@@ -1,16 +1,7 @@
 import React from "react";
-// KeyBenefits.tsx — Ice & Steel design — 2×3 dashboard metrics grid
 import { IconClock, IconFlame, IconPeople, IconPaw, IconLeaf, IconShield } from "@/components/Icons";
 
-interface Benefit {
-  Icon: (props: { className?: string }) => React.ReactElement;
-  title: string;
-  desc: string;
-  metric: string;
-  metricLabel: string;
-}
-
-const benefits: Benefit[] = [
+const benefits = [
   {
     Icon: IconClock,
     title: "Critical Time Advantage",
@@ -28,14 +19,14 @@ const benefits: Benefit[] = [
   {
     Icon: IconPeople,
     title: "Human Safety",
-    desc: "Evacuation corridors stay open longer. Stairwells and exit pathways remain more viable. The human cost of fire events is measurably reduced.",
+    desc: "Evacuation corridors stay open longer. Stairwells and exit pathways remain viable. The human cost of fire events is measurably reduced.",
     metric: "↑80%",
     metricLabel: "safer evacuation viability",
   },
   {
     Icon: IconPaw,
     title: "Animal Safety",
-    desc: "Slower fire propagation creates escape corridors for wildlife. Livestock, farm animals and wild species gain critical time to flee fire zones.",
+    desc: "Slower propagation creates escape corridors for wildlife. Livestock, farm animals and wild species gain critical time to flee fire zones.",
     metric: "Preserved",
     metricLabel: "wildlife escape corridors",
   },
@@ -49,7 +40,7 @@ const benefits: Benefit[] = [
   {
     Icon: IconShield,
     title: "Infrastructure Protection",
-    desc: "Buildings, critical infrastructure, cultural heritage sites and industrial facilities maintain structural integrity for longer under fire threat.",
+    desc: "Buildings, critical infrastructure, cultural heritage sites and industrial facilities maintain structural integrity longer under fire threat.",
     metric: "60–80%",
     metricLabel: "reduction in asset exposure risk",
   },
@@ -62,85 +53,69 @@ export default function KeyBenefits() {
       className="relative py-10 overflow-hidden"
       style={{ background: "#050505" }}
     >
-      {/* Ambient glow right side */}
-      <div
-        className="absolute right-0 top-0 bottom-0 w-96 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(270deg, rgba(201,168,76,0.05) 0%, transparent 100%)",
-        }}
-      />
-
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 lg:px-10">
-        {/* Centered header */}
-        <div className="text-center mb-14">
-          <span className="inline-block text-xs font-bold tracking-[0.3em] uppercase text-[#e8c97a] mb-5">
+        {/* Left-aligned header */}
+        <div className="mb-14">
+          <span className="inline-block text-xs font-bold tracking-[0.3em] uppercase text-[#e8c97a] mb-4">
             Why DNF
           </span>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#f0e8d8] leading-tight mb-6">
-            Measurable Benefits.
-            <br />
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#f0e8d8] leading-tight mb-4">
+            Measurable Benefits.<br />
             <span className="text-ice-gradient">Real-World Impact.</span>
           </h2>
-          <p className="text-[#8a7060] text-lg max-w-2xl mx-auto leading-relaxed">
-            DNF delivers quantifiable advantages across every dimension that matters in fire safety — time,
-            safety, environmental impact, and financial protection. No trade-offs.
+          <p className="text-[#8a7060] text-lg max-w-lg leading-relaxed">
+            Quantifiable advantages across every dimension that matters in fire safety — no trade-offs.
           </p>
         </div>
 
-        {/* 2×3 equal metrics grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Two-column list of horizontal cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {benefits.map((b, i) => {
             const BIcon = b.Icon;
             return (
               <div
                 key={i}
-                className="rounded-2xl p-7 flex flex-col group"
+                className="flex items-start gap-5 rounded-2xl px-6 py-5 group hover:border-amber-700/30 transition-all"
                 style={{
-                  background: "rgba(18,12,4,0.8)",
-                  border: "1px solid rgba(201,168,76,0.15)",
-                  borderTop: "2px solid #c9a84c",
+                  background: "rgba(14,10,3,0.7)",
+                  border: "1px solid rgba(201,168,76,0.12)",
                 }}
               >
-                {/* Icon row */}
+                {/* Icon */}
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-[#e8c97a]"
+                  className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-[#e8c97a]"
                   style={{
                     background: "rgba(201,168,76,0.08)",
-                    border: "1px solid rgba(201,168,76,0.2)",
+                    border: "1px solid rgba(201,168,76,0.18)",
                   }}
                 >
-                  <BIcon className="w-6 h-6" />
+                  <BIcon className="w-5 h-5" />
                 </div>
 
-                {/* Big metric */}
-                <div className="text-3xl font-black text-ice-gradient mb-1">{b.metric}</div>
-                <div className="text-xs text-[#5a4830] mb-5 tracking-wide">{b.metricLabel}</div>
-
-                {/* Divider */}
-                <div
-                  className="h-px w-full mb-5"
-                  style={{ background: "rgba(201,168,76,0.1)" }}
-                />
-
-                {/* Title & description */}
-                <h3 className="text-base font-bold text-[#f0e8d8] mb-2">{b.title}</h3>
-                <p className="text-sm text-[#8a7060] leading-relaxed flex-1">{b.desc}</p>
+                {/* Content */}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-baseline gap-3 mb-1.5 flex-wrap">
+                    <h3 className="text-sm font-bold text-[#f0e8d8]">{b.title}</h3>
+                    <span className="text-lg font-black text-ice-gradient leading-none shrink-0">{b.metric}</span>
+                  </div>
+                  <p className="text-xs text-[#8a7060] leading-relaxed">{b.desc}</p>
+                </div>
               </div>
             );
           })}
         </div>
 
-        {/* Bottom summary bar */}
+        {/* Bottom bar */}
         <div
-          className="mt-12 p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6"
+          className="mt-10 p-7 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-5"
           style={{
-            background: "rgba(18,12,4,0.6)",
+            background: "rgba(14,10,3,0.6)",
             border: "1px solid rgba(201,168,76,0.12)",
+            borderLeft: "3px solid #c9a84c",
           }}
         >
           <div>
-            <p className="text-lg font-bold text-[#f0e8d8]">
+            <p className="text-base font-bold text-[#f0e8d8]">
               Six dimensions. One technology.{" "}
               <span className="text-ice-gradient">Proven performance.</span>
             </p>
